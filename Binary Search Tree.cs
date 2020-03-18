@@ -79,6 +79,50 @@ class BST
 
         return 1 + Math.Max(Left_SubTree, Right_SubTree); // apply returning recursive on every node from empty node ==> leaf ==> parent tree ==> ....etc head
     }
+    private Node RemoveHelper(Node root, int data)        // Private method with recursion
+    {
+        if (root == null)
+        {
+            return root;    // empty tree
+        }
+        else if (data < root.date)  // searching for element in BT conditions
+        {
+            root.left = RemoveHelper(root.left, data);
+        }
+        else if (data > root.date)  // searching for element in BT conditions
+        {
+            root.right = RemoveHelper(root.right, data);
+        }
+        else
+        {
+            if (root.left == null)   // has only one child or no children
+            {
+                return root.right;
+                //Node ReturnedNodeToPerent = root.right;
+                //return ReturnedNodeToPerent;
+            }
+            else if (root.right == null) // has only one child or no children
+            {
+                return root.left;
+                //Node ReturnedNodeToPerent = root.left;
+                //return ReturnedNodeToPerent;
+            }
+            else   // has Two children 
+            {
+                // for doing to left child
+                int maxValue = this.GetMaxHelper(root.left);
+                root.date = maxValue;
+                root.left = RemoveHelper(root.left, maxValue);
+
+                //// for doing to right child
+                //int minValue = this.GetMinHelper(root.right);
+                //root.date = minValue;
+                //root.right = RemoveHelper(root.right, minValue); 
+                
+            }
+        }
+        return root;
+    }
     //--------------------------------------------------------------------------------------------------------------------------
     public void Add(int value)
     {
@@ -128,6 +172,10 @@ class BST
             if (current.right != null) { q.Enqueue(current.right); }
         }
     }
+    public void Remove(int data)
+    {
+        root = RemoveHelper(root, data);    // return a node to a root/parent that will linked to
+    }
 }
 
 
@@ -144,8 +192,11 @@ class Solution
         sT.Add(7);
         sT.Add(10);
         sT.Add(15);
-
+        sT.Remove(15);
         sT.Display_LevelOrder();
+        Console.WriteLine("Max Number of tree = {0}", sT.GetMax());
+        Console.WriteLine("Min Number of tree = {0}", sT.GetMin());
+        Console.WriteLine("Hight of tree = {0}", sT.GetHeight());
     }
 }
 /*
